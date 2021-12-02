@@ -18,7 +18,7 @@ Data Formatting and Cleaning :
 
 
 Data Loading :
-1. Data has been loaded to bucket by partitioning over year.
+1. Data has been loaded to hdfs path by partitioning over year.
 2. File format is used as ORC for storing.
 
 
