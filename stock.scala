@@ -128,7 +128,7 @@ object stockhomedata {
         
         
     val partionkey= "year"
-    val fileformat= "parquet"
+    val fileformat= "orc"
 	  
     log.info("Loading data into HDFS Paths")
     dailyTempDf.write().mode(SaveMode.Overwrite).partitionBy(partionkey).format(fileformat).save("gs://<bucketname>/<appname>/<tablename>/")
