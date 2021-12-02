@@ -1,11 +1,10 @@
 package com.sparktest.spark.stockhome
 
-import org.apache.spark.sql.types.{StringType, StructField, StructType}
+import org.apache.spark.sql.functions.col
 import org.apache.spark.sql.{Row, SparkSession}
-import org.apache.spark.sql.hive.HiveContext
 import org.apache.log4j.Logger
 
-object stockhomedata {
+object stock {
 
   def main(args:Array[String]):Unit={
 
@@ -131,8 +130,8 @@ object stockhomedata {
     val fileformat= "orc"
 	  
     log.info("Loading data into HDFS Paths")
-    dailyTempDf.write().mode(SaveMode.Overwrite).partitionBy(partionkey).format(fileformat).save("gs://<bucketname>/<appname>/<tablename>/")
-    baroMeterDf.write().mode(SaveMode.Overwrite).partitionBy(partionkey).format(fileformat).save("gs://<bucketname>/<appname>/<tablename>/")
+    dailyTempDf.write().mode(SaveMode.Overwrite).partitionBy(partionkey).format(fileformat).save("hdfs://namenodeaddress:8020/usr/hive/warehouse/<appname/dbname>/<dailytemptable>/")
+    baroMeterDf.write().mode(SaveMode.Overwrite).partitionBy(partionkey).format(fileformat).save("hdfs://namenodeaddress:8020/usr/hive/warehouse/<appname/dbname>/<barometertable>/")
   }
 }
     
