@@ -124,14 +124,15 @@ object stockhomedata {
                         split(col("new_val")," ").getItem(5).as("noon_pressure"),split(col("new_val")," ").getItem(7).as("evening_pressure"))
                 .drop("new_val","val")
                 
-    val baroMeterDf = rawPressureFrmt1858df.unionByName(rawPressureFrmt1861df).unionByName(rawPressureFrmt2017df)  
+    val baroMeterDf = rawPressureFrmt1858df.unionByName(rawPressureFrmt1861df).unionByName(rawPressureFrmt2017df).unionByName(rawPressureFrmt1937df)
         
         
     val partionkey= "year"
+    val fileformat= "parquet"
 	  
     log.info("Loading data into HDFS Paths")
-    dailyTempDf.write().mode(SaveMode.Overwrite).partitionBy(partionkey).format("parquet").save("gs://<bucketname>/<appname>/<tablename>/")
-    baroMeterDf.write().mode(SaveMode.Overwrite).partitionBy(partionkey).format("parquet").save("gs://<bucketname>/<appname>/<tablename>/")
+    dailyTempDf.write().mode(SaveMode.Overwrite).partitionBy(partionkey).format(fileformat).save("gs://<bucketname>/<appname>/<tablename>/")
+    baroMeterDf.write().mode(SaveMode.Overwrite).partitionBy(partionkey).format(fileformat).save("gs://<bucketname>/<appname>/<tablename>/")
   }
 }
     
