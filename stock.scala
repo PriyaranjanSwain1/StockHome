@@ -74,8 +74,12 @@ object stockhomedata {
     log.info("Loading Barometer Reading ")
     
     val rawPressure2017df = spark.read.format("text").option("header","false")
-                   .load("/resources/stockholm_barometer_1862_1937.txt","/resources/stockholm_barometer_1938_1960.txt",
+                   .load("/resources/stockholm_barometer_1938_1960.txt",
                          "/resources/stockholm_barometer_1961_2012.txt","/resources/stockholm_barometer_2013_2017.txt")
+                   .toDF("val")
+	  
+    val rawPressure1937df = spark.read.format("text").option("header","false")
+                   .load("/resources/stockholm_barometer_1862_1937.txt")
                    .toDF("val")
 	  
     val rawPressure1861df = spark.read.format("text").option("header","false")
@@ -85,14 +89,22 @@ object stockhomedata {
                    .load("/resources/stockholm_barometer_1756_1858.txt")
                    .toDF("val")
                    
-    log.info("Formatting for data between 1862 to 2017")
+    log.info("Formatting for data between 1938 to 2017")
     val rawPressureFrmt2017df = rawPressure2017df
+                .withColumn("udfResult",myUDf(col("val")))
+                .withColumn("new_val", col("udfResult")(0))
+                .select(split(col("new_val")," ").getItem(0).as("year"),split(col("new_val")," ").getItem(1).as("month"),
+                        split(col("new_val")," ").getItem(2).as("date"),0.75*(split(col("new_val")," ").getItem(3)).as("morning_pressure"),
+                        0.75*(split(col("new_val")," ").getItem(4)).as("noon_pressure"),0.75*(split(col("new_val")," ").getItem(5)).as("evening_pressure"))
+        
+    log.info("Formatting for data between 1859 to 1861")
+    val rawPressureFrmt1937df = rawPressure1937df
                 .withColumn("udfResult",myUDf(col("val")))
                 .withColumn("new_val", col("udfResult")(0))
                 .select(split(col("new_val")," ").getItem(0).as("year"),split(col("new_val")," ").getItem(1).as("month"),
                         split(col("new_val")," ").getItem(2).as("date"),split(col("new_val")," ").getItem(3).as("morning_pressure"),
                         split(col("new_val")," ").getItem(4).as("noon_pressure"),split(col("new_val")," ").getItem(5).as("evening_pressure"))
-                
+                .drop("new_val","val")
             
     log.info("Formatting for data between 1859 to 1861")
     val rawPressureFrmt1861df = rawPressure1861df
