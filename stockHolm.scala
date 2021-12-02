@@ -4,7 +4,7 @@ import org.apache.spark.sql.functions.col
 import org.apache.spark.sql.{Row, SparkSession}
 import org.apache.log4j.Logger
 
-object stock {
+object stockHolm {
 
   def main(args:Array[String]):Unit={
 
