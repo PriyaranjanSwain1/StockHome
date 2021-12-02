@@ -14,4 +14,12 @@ Data Formatting and Cleaning :
 2. Splitted the row and loaded each data into individual columns of Spark Dataframe.
 3. For barometer reading few columns are ignored like 'barometer temperature observations for 1756_1858' , 'air pressure reduced to 0 degC' & 'thermometer observations' for 1859-1861
 4. As the unit of air pressure were different in different files , everything changed to a single unit.
+5. All files are merged to single dataframe
+
+
+Data Loading :
+1. Data has been loaded to bucket by partitioning over year.
+2. File format is used as ORC for storing.
+
+
 
